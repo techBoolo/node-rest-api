@@ -1,6 +1,8 @@
 const express = require('express');
+require('dotenv').config();
 const logger = require('morgan');
 const cors = require('cors');
+const mongoose = require('mongoose');
 const productRoute = require('./routes/product');
 const orderRoute = require('./routes/order');
 const errorHandler = require('./middlewares/errorHandler')
@@ -15,6 +17,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
+require('./models/dbConnection');
 app.use('/products', productRoute);
 app.use('/orders', orderRoute);
 
