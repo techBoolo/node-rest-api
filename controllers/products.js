@@ -1,12 +1,23 @@
 const Product = require('../models/product');
 const { NoEntryFound } = require('../helpers/errorExceptions');
 
+const url = `http://localhost:${process.env.PORT}`;
 exports.index = (req, res, next) => {
   Product.find({})
+    .select("name price _id")
     .then(products => {
       res.status(200).json({
         message: "list of products",
-        products
+        count: products.length,
+        products: products.map(product => {
+          return {
+            ...product._doc,
+            request: {
+              type: 'GET',
+              url: `${url}/products/${product._id}`
+            }
+          }
+        })
       })
     })
     .catch(error => next(error))
@@ -15,11 +26,17 @@ exports.index = (req, res, next) => {
 exports.show = (req, res, next) => {
   const id = req.params.id;
   Product.findOne({_id: id})
+    .select("name price _id")
     .then(product => {
       if(product) {
         res.status(200).json({
           message: "fetch specific product",
-          product
+          product,
+          request: {
+            type: "GET",
+            description: "retrieve all the products",
+            url: `${url}/products`
+          }
         })
       } else {
         const error = new NoEntryFound("valid entry is not found.");
@@ -40,7 +57,15 @@ exports.create = (req, res, next) => {
     .then((result) => {
       res.status(201).json({
         message: "product created.",
-        result
+        product: {
+          name: result.name,
+          price: result.price,
+          _id: result._id,
+          request: {
+            type: "GET",
+            url: `${url}/products/${result._id}`
+          }
+        }
       })
     })
     .catch( error => next(error) )
@@ -54,7 +79,11 @@ exports.update = (req, res, next) => {
       console.log(result);
       res.status(200).json({
         message: "product updated",
-        result
+        result,
+        request: {
+          type: "GET",
+          url: `${url}/products/${result._id}`
+        }
       })
     })
     .catch(error => next(error))
