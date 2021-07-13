@@ -4,32 +4,26 @@ const router = express.Router();
 
 router.get('/', (req, res, next) => {
   res.status(200).json({
-    message: "handle GET request to /products"
+    message: "Orders were fetched"
   })
 })
 
 router.post('/', (req, res, next) => {
   res.status(201).json({
-    message: "handle POST request to /products"
+    message: "create new order"
   })
 })
 
 router.get('/:id', (req, res, next) => {
   res.status(200).json({
-    message: "Get specific product",
+    message: "order detail",
     id: req.params.id
   })
 })
 
-router.patch('/:id', (req, res, next) => {
-  res.status(200).json({
-    message: "handle PATCH request to /products"
-  })
-})
-
 router.delete('/:id', (req, res, next) => {
-  res.status(200).json({
-    message: "handle DELETE request to /products"
+  res.status(204).json({
+    message: "order deleted"
   })
 })
 
