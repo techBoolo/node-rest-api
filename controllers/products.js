@@ -5,7 +5,7 @@ const url = `http://localhost:${process.env.PORT}`;
 
 exports.index = (req, res, next) => {
   Product.find({})
-    .select("name price _id")
+    .select("name price _id productImage")
     .then(products => {
       res.status(200).json({
         message: "list of products",
@@ -27,7 +27,7 @@ exports.index = (req, res, next) => {
 exports.show = (req, res, next) => {
   const id = req.params.id;
   Product.findOne({_id: id})
-    .select("name price _id")
+    .select("name price _id productImage")
     .then(product => {
       if(product) {
         res.status(200).json({
@@ -53,7 +53,8 @@ exports.create = (req, res, next) => {
   const { name, price } = req.body;
   const product = new Product({
     name,
-    price
+    price,
+    productImage: req.file.path
   })
   product.save()
     .then((result) => {
@@ -63,6 +64,7 @@ exports.create = (req, res, next) => {
           name: result.name,
           price: result.price,
           _id: result._id,
+          productImage: result.productImage,
           request: {
             type: "GET",
             url: `${url}/products/${result._id}`
