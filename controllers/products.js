@@ -2,6 +2,7 @@ const Product = require('../models/product');
 const { NoEntryFound } = require('../helpers/errorExceptions');
 
 const url = `http://localhost:${process.env.PORT}`;
+
 exports.index = (req, res, next) => {
   Product.find({})
     .select("name price _id")
@@ -48,6 +49,7 @@ exports.show = (req, res, next) => {
 }
 
 exports.create = (req, res, next) => {
+  console.log(req.file);
   const { name, price } = req.body;
   const product = new Product({
     name,
