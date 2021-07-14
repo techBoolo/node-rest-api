@@ -6,6 +6,7 @@ const url = `http://localhost:${process.env.PORT}`;
 exports.index =  (req, res, next) => {
   Order.find({})
     .select("product quantity _id")
+    .populate('product', 'name')
     .then(orders => {
       res.status(200).json({
         message: "Orders were fetched",
@@ -27,6 +28,7 @@ exports.index =  (req, res, next) => {
 exports.show = (req, res, next) => {
   Order.findOne({ _id: req.params.id })
     .select("product quantity _id")
+    .populate('product')
     .then(order => {
       if(order) {
         res.status(200).json({
