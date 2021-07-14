@@ -18,8 +18,13 @@ const generateToken = async (payload) => {
     )
 }
 
+const verifyToken = async (token) => {
+  return await jwt.verify(token, process.env.JWT_KEY)
+}
+
 module.exports = {
   hashPassword,
   comparePassword,
-  generateToken
+  generateToken,
+  verifyToken,
 }
