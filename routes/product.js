@@ -3,7 +3,15 @@ const multer = require('multer');
 const productsController = require('../controllers/products');
 
 const router = express.Router();
-const upload = multer({ dest: process.env.UPLOAD_PATH});
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, process.env.UPLOAD_PATH)
+  },
+  filename: function(req, file, cb) {
+    cb(null, new Date().toISOString() + '.' + file.originalname)
+  }
+})
+const upload = multer({ storage: storage });
 
 router.get('/', productsController.index)
 router.get('/:id', productsController.show )
