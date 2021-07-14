@@ -11,7 +11,17 @@ const storage = multer.diskStorage({
     cb(null, new Date().toISOString() + '.' + file.originalname)
   }
 })
-const upload = multer({ storage: storage });
+const fileFilter = (req, file, cb) => {
+  if(!file.mimetype.match(/image\/(jpg|jpeg|png|gif)/)){
+     return cb(new Error("Only images are allowed"), false) 
+      }  
+    cb(null, true)
+}
+const upload = multer({ 
+  storage: storage,
+  fileFilter: fileFilter,
+  limits: { fileSize: 1024 * 1024 }
+});
 
 router.get('/', productsController.index)
 router.get('/:id', productsController.show )
