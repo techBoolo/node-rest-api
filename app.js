@@ -5,6 +5,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const productRoute = require('./routes/product');
 const orderRoute = require('./routes/order');
+const userRoute = require('./routes/user');
 const errorHandler = require('./middlewares/errorHandler')
 const unknownRoute = require('./middlewares/unknownRoute')
 
@@ -20,6 +21,7 @@ app.use(cors());
 require('./models/dbConnection');
 app.use('/products', productRoute);
 app.use('/orders', orderRoute);
+app.use('/users', userRoute);
 
 app.use(unknownRoute);
 app.use(errorHandler);
